@@ -1,0 +1,4 @@
+{
+  "spring.rabbitmq.username": "guest",
+  "spring.rabbitmq.password": "guest"
+}

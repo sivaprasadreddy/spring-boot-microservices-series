@@ -1,0 +1,72 @@
+version: '3'
+services:
+  vault:
+    image: vault
+    container_name: vault
+    cap_add:
+      - IPC_LOCK
+    environment:
+      VAULT_DEV_ROOT_TOKEN_ID: 934f9eae-31ff-a8ef-e1ca-4bea9e07aa09
+    ports:
+      - 8200:8200
+
+  setup-vault:
+    image: vault
+    container_name: setup-vault
+    entrypoint: /bin/sh
+    volumes:
+      - './config:/config'
+    environment:
+      VAULT_ADDR: 'http://vault:8200'
+      CONFIG_DIR: '/config'
+    command: >
+      -c "
+      sleep 2;
+      /config/vault-init.sh;
+      "
+    depends_on:
+      - vault
+
+  configserver:
+    container_name: configserver
+    build: ./config-server
+    ports:
+      - "18888:8888"
+      - "18787:8787"
+    depends_on:
+      - rabbitmq
+
+  catalog-service:
+    container_name: catalog-service
+    build: ./catalog-service
+    ports:
+      - "28080:8181"
+      - "28787:8787"
+    depends_on:
+      - configserver
+      - mysqldb
+    entrypoint: /bin/sh
+    command: >
+      -c "
+      while ! (nc -z configserver 8888 && nc -z vault 8200); do sleep 5; echo 'Waiting for vault and configserver services to start-up...'; done;
+      java -Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=8787,suspend=n -jar -Dspring.profiles.active=docker /app.jar
+      "
+
+  mysqldb:
+    image: mysql:5.7
+    container_name: mysqldb
+    ports:
+      - "3306:3306"
+    environment:
+     MYSQL_ROOT_PASSWORD: admin
+     MYSQL_DATABASE: catalog
+
+  rabbitmq:
+    container_name: rabbitmq
+    image: 'rabbitmq:management'
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+    ports:
+      - "5672:5672"
+      - "15672:15672"
