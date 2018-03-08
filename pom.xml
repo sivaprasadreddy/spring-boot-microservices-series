@@ -14,7 +14,9 @@
 
 	<modules>
 		<module>config-server</module>
+		<module>service-registry</module>
 		<module>catalog-service</module>
+		<module>inventory-service</module>
 	</modules>
 
 

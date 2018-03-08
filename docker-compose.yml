@@ -27,28 +27,52 @@ services:
     depends_on:
       - vault
 
-  configserver:
-    container_name: configserver
+  config-server:
+    container_name: config-server
     build: ./config-server
     ports:
-      - "18888:8888"
+      - "8888:8888"
       - "18787:8787"
     depends_on:
       - rabbitmq
+
+  service-registry:
+    container_name: service-registry
+    build: ./service-registry
+    ports:
+      - "8761:8761"
+      - "28787:8787"
+    depends_on:
+      - config-server
 
   catalog-service:
     container_name: catalog-service
     build: ./catalog-service
     ports:
-      - "28080:8181"
-      - "28787:8787"
+      - "18181:8181"
+      - "19797:8787"
     depends_on:
-      - configserver
+      - config-server
       - mysqldb
     entrypoint: /bin/sh
     command: >
       -c "
-      while ! (nc -z configserver 8888 && nc -z vault 8200); do sleep 5; echo 'Waiting for vault and configserver services to start-up...'; done;
+      while ! (nc -z config-server 8888 && nc -z vault 8200); do sleep 5; echo 'Waiting for vault and config-server services to start-up...'; done;
+      java -Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=8787,suspend=n -jar -Dspring.profiles.active=docker /app.jar
+      "
+  inventory-service:
+    container_name: inventory-service
+    build: ./inventory-service
+    ports:
+      - "18282:8282"
+      - "29797:8787"
+    depends_on:
+      - config-server
+      - mysqldb
+    entrypoint: /bin/sh
+    command: >
+      -c "
+      while ! (nc -z config-server 8888 && nc -z vault 8200); do sleep 5; echo 'Waiting for vault and config-server services to start-up...'; done;
       java -Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=8787,suspend=n -jar -Dspring.profiles.active=docker /app.jar
       "
 
