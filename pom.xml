@@ -15,6 +15,7 @@
 	<modules>
 		<module>config-server</module>
 		<module>service-registry</module>
+		<module>hystrix-dashboard</module>
 		<module>catalog-service</module>
 		<module>inventory-service</module>
 	</modules>

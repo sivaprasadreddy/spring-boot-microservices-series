@@ -45,6 +45,13 @@ services:
     depends_on:
       - config-server
 
+  hystrix-dashboard:
+    container_name: hystrix-dashboard
+    build: ./hystrix-dashboard
+    ports:
+      - "8788:8788"
+      - "38787:8787"
+
   catalog-service:
     container_name: catalog-service
     build: ./catalog-service
