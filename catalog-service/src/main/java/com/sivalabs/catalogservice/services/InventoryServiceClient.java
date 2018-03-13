@@ -11,28 +11,40 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.TimeUnit;
 
 @Service
 @Slf4j
 public class InventoryServiceClient {
     private final RestTemplate restTemplate;
+    private final InventoryServiceFeignClient inventoryServiceFeignClient;
     //TODO; move this to config file
     private static final String INVENTORY_API_PATH = "http://inventory-service/api/";
 
+
     @Autowired
-    public InventoryServiceClient(RestTemplate restTemplate) {
+    public InventoryServiceClient(RestTemplate restTemplate, InventoryServiceFeignClient inventoryServiceFeignClient) {
         this.restTemplate = restTemplate;
+        this.inventoryServiceFeignClient = inventoryServiceFeignClient;
     }
 
-    @HystrixCommand(fallbackMethod = "getDefaultProductInventoryByCode"
-            /*
-            ,commandProperties = {
-                    @HystrixProperty(name="execution.isolation.strategy", value="SEMAPHORE")
+    @HystrixCommand(fallbackMethod = "getDefaultProductInventoryLevels",
+            commandProperties = {
+                 @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "2000")
             }
-            */
     )
+    public List<ProductInventoryResponse> getProductInventoryLevels() {
+        return this.inventoryServiceFeignClient.getInventoryLevels();
+    }
+
+    @SuppressWarnings("unused")
+    List<ProductInventoryResponse> getDefaultProductInventoryLevels() {
+        return new ArrayList<>();
+    }
+
+    @HystrixCommand(fallbackMethod = "getDefaultProductInventoryByCode")
     public Optional<ProductInventoryResponse> getProductInventoryByCode(String productCode)
     {
         log.info("CorrelationID: "+ MyThreadLocalsHolder.getCorrelationId());
@@ -44,7 +56,7 @@ public class InventoryServiceClient {
         /*
         //Simulate Delay
         try {
-            TimeUnit.SECONDS.sleep(5);
+            java.util.concurrent.TimeUnit.SECONDS.sleep(5);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

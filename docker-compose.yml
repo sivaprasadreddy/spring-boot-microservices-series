@@ -1,5 +1,24 @@
 version: '3'
 services:
+  mysqldb:
+    image: mysql:5.7
+    container_name: mysqldb
+    ports:
+      - "3306:3306"
+    environment:
+     MYSQL_ROOT_PASSWORD: admin
+     MYSQL_DATABASE: catalog
+
+  rabbitmq:
+    container_name: rabbitmq
+    image: 'rabbitmq:management'
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+
   vault:
     image: vault
     container_name: vault
@@ -82,22 +101,33 @@ services:
       while ! (nc -z config-server 8888 && nc -z vault 8200); do sleep 5; echo 'Waiting for vault and config-server services to start-up...'; done;
       java -Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=8787,suspend=n -jar -Dspring.profiles.active=docker /app.jar
       "
-
-  mysqldb:
-    image: mysql:5.7
-    container_name: mysqldb
+  order-service:
+    container_name: order-service
+    build: ./order-service
     ports:
-      - "3306:3306"
-    environment:
-     MYSQL_ROOT_PASSWORD: admin
-     MYSQL_DATABASE: catalog
-
-  rabbitmq:
-    container_name: rabbitmq
-    image: 'rabbitmq:management'
-    environment:
-      - RABBITMQ_DEFAULT_USER=guest
-      - RABBITMQ_DEFAULT_PASS=guest
+      - "18383:8383"
+      - "39797:8787"
+    depends_on:
+      - config-server
+    entrypoint: /bin/sh
+    command: >
+      -c "
+      while ! (nc -z config-server 8888 && nc -z vault 8200); do sleep 5; echo 'Waiting for vault and config-server services to start-up...'; done;
+      java -Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=8787,suspend=n -jar -Dspring.profiles.active=docker /app.jar
+      "
+  shoppingcart-ui:
+    container_name: shoppingcart-ui
+    build: ./shoppingcart-ui
     ports:
-      - "5672:5672"
-      - "15672:15672"
+      - "18080:8080"
+      - "49797:8787"
+    depends_on:
+      - config-server
+    entrypoint: /bin/sh
+    command: >
+      -c "
+      while ! (nc -z config-server 8888 && nc -z vault 8200); do sleep 5; echo 'Waiting for vault and config-server services to start-up...'; done;
+      java -Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=8787,suspend=n -jar -Dspring.profiles.active=docker /app.jar
+      "
+
+

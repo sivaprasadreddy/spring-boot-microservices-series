@@ -9,9 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -27,7 +26,23 @@ public class ProductService {
     }
 
     public List<Product> findAllProducts() {
-        return productRepository.findAll();
+        List<Product> products = productRepository.findAll();
+        final Map<String, Integer> inventoryLevels = getInventoryLevelsWithFeignClient();
+        final List<Product> availableProducts = products.stream()
+                .filter(p -> inventoryLevels.get(p.getCode()) != null && inventoryLevels.get(p.getCode()) > 0)
+                .collect(Collectors.toList());
+        return availableProducts;
+    }
+
+    private Map<String, Integer> getInventoryLevelsWithFeignClient() {
+        log.info("Fetching inventory levels using FeignClient");
+        Map<String, Integer> inventoryLevels = new HashMap<>();
+        List<ProductInventoryResponse> inventory = inventoryServiceClient.getProductInventoryLevels();
+        for (ProductInventoryResponse item: inventory){
+            inventoryLevels.put(item.getProductCode(), item.getAvailableQuantity());
+        }
+        log.debug("InventoryLevels: {}", inventoryLevels);
+        return inventoryLevels;
     }
 
     public Optional<Product> findProductByCode(String code) {
