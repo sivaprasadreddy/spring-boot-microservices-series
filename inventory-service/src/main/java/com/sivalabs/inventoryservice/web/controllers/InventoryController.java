@@ -39,6 +39,7 @@ public class InventoryController {
     @GetMapping("/api/inventory")
     @HystrixCommand
     public List<InventoryItem> getInventory() {
+        log.info("Finding inventory for all products ");
         return inventoryItemRepository.findAll();
     }
 }
