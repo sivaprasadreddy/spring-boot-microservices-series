@@ -22,7 +22,7 @@ public class Oauth2ServerApplication {
         SpringApplication.run(Oauth2ServerApplication.class, args);
     }
 
-    @GetMapping("/user")
+    @GetMapping("/userInfo")
     public Map<String, Object> user(OAuth2Authentication user) {
         Map<String, Object> userInfo = new HashMap<>();
         userInfo.put("user", user.getUserAuthentication().getPrincipal());

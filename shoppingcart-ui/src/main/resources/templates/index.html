@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>ShoppingCart</title>
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+          crossorigin="anonymous"/>
+    <style>
+        body {
+            padding-top: 75px;
+        }
+    </style>
+
+</head>
+<body>
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="#">ShoppingCart</a>
+    </div>
+    <div id="navbar" class="collapse navbar-collapse">
+        <ul class="nav navbar-nav">
+            <li class="active"><a href="#">Home</a></li>
+        </ul>
+    </div>
+</nav>
+
+<div class="container" id="app">
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+        <ul class="list-group">
+            <li class="list-group-item" v-for="product in products">
+                <span>{{ product.name }}</span>
+                <button class="badge" v-on:click="addToCart(product)">Add To Cart</button>
+            </li>
+        </ul>
+        </div>
+    </div>
+    <hr/>
+
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+            <p>Customer Email: <input type="text" v-model="cart.customerEmail"/></p>
+            <p>Customer Address: <input type="text" v-model="cart.customerAddress"/></p>
+            <pre>{{cart}}</pre>
+            <p><button type="button" class="btn btn-primary"
+                    v-on:click="placeOrder">Place Order</button></p>
+            <p>{{ orderStatus }}</p>
+        </div>
+    </div>
+    <hr/>
+
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+            <p>Get Order Details By Order ID: <input type="text" v-model="searchOrderId"/>
+            <button type="button" class="btn btn-warning"
+                    v-on:click="searchOrder">Search Order</button>
+            </p>
+            <pre>{{order}}</pre>
+        </div>
+    </div>
+
+</div>
+<script src="jquery.min.js"></script>
+<script src="vue.min.js"></script>
+<script type="text/javascript" src="app.js"></script>
+</body>
+</html>

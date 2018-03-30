@@ -14,6 +14,7 @@
 
 	<modules>
 		<module>config-server</module>
+		<module>oauth2-server</module>
 		<module>service-registry</module>
 		<module>hystrix-dashboard</module>
 		<module>catalog-service</module>

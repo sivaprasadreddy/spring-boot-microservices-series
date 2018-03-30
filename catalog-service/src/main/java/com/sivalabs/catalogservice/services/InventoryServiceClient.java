@@ -32,7 +32,7 @@ public class InventoryServiceClient {
 
     @HystrixCommand(fallbackMethod = "getDefaultProductInventoryLevels",
             commandProperties = {
-                 @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "2000")
+                 @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "10000")
             }
     )
     public List<ProductInventoryResponse> getProductInventoryLevels() {
@@ -41,6 +41,7 @@ public class InventoryServiceClient {
 
     @SuppressWarnings("unused")
     List<ProductInventoryResponse> getDefaultProductInventoryLevels() {
+        log.info("Returning default product inventory levels");
         return new ArrayList<>();
     }
 

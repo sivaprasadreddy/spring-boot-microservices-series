@@ -1,6 +1,7 @@
 package com.sivalabs.oauth2server;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -11,6 +12,9 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Aut
 
 @Configuration
 public class OAuth2Config extends AuthorizationServerConfigurerAdapter {
+
+    @Value("${redirect-uri}")
+    private String redirectUri;
 
     @Autowired
     AuthenticationManager authenticationManager;
@@ -24,10 +28,12 @@ public class OAuth2Config extends AuthorizationServerConfigurerAdapter {
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
         clients.inMemory()
-                .withClient("sivalabs")
-                .secret(passwordEncoder.encode("kspr"))
-                .authorizedGrantTypes("refresh_token", "password", "client_credentials")
-                .scopes("webclient","mobileclient");
+                .withClient("client1")
+                .secret(passwordEncoder.encode("client1secret"))
+                .authorizedGrantTypes("authorization_code","implicit", "password","client_credentials","refresh_token")
+                .scopes("server")
+                .redirectUris(redirectUri)
+        ;
     }
 
     @Override
