@@ -5,7 +5,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(HttpStatus.NOT_FOUND)
 public class ProductNotFoundException extends RuntimeException {
-    public ProductNotFoundException() {
+	private static final long serialVersionUID = 1L;
+
+	public ProductNotFoundException() {
     }
 
     public ProductNotFoundException(String message) {
