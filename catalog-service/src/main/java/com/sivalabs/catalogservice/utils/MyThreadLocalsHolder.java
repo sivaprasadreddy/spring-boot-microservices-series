@@ -1,7 +1,7 @@
 package com.sivalabs.catalogservice.utils;
 
 public class MyThreadLocalsHolder {
-    private static final ThreadLocal<String> CORRELATION_ID = new ThreadLocal();
+    private static final ThreadLocal<String> CORRELATION_ID = new ThreadLocal<String>();
 
     public static void setCorrelationId(String correlationId) {
         CORRELATION_ID.set(correlationId);
