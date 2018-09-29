@@ -1,6 +1,10 @@
 # spring-boot-microservices-series
 Code for SpringBoot MicroServices Blog Series
 
+## Pre-Requisites
+ - Java 8
+ - Docker(https://store.docker.com/editions/community/docker-ce-desktop-windows)
+
 ## How to run?
 
 ### Build all modules:
