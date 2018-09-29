@@ -4,8 +4,20 @@ Code for SpringBoot MicroServices Blog Series
 ## Pre-Requisites
  - Java 8
  - Docker(https://store.docker.com/editions/community/docker-ce-desktop-windows)
+ - Vault(https://www.vaultproject.io/)
+ - RabbitMQ (http://www.rabbitmq.com/install-windows.html)
 
 ## How to run?
+
+### SetUp Vault in windows
+
+Download and extract the exe file to /config folder
+
+execute command vault server -dev
+
+copy the root token displayed to vault-init.bat file and in new terminal run it.
+
+If above step is not working then manually add values by visiting http://127.0.0.1:8200/ui/vault/secrets/secret/list
 
 ### Build all modules:
 

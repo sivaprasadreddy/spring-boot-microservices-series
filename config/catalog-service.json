@@ -1,4 +1,4 @@
 { 
     "spring.datasource.username": "root", 
-    "spring.datasource.password": "admin"
+    "spring.datasource.password": "password"
 }
