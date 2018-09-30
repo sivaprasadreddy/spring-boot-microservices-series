@@ -25,7 +25,7 @@ public class ProductController {
         this.productService = productService;
     }
 
-    @GetMapping("")
+    @GetMapping
     public List<Product> allProducts(HttpServletRequest request) {
         log.info("Finding all products");
         String auth_header = request.getHeader("AUTH_HEADER");
