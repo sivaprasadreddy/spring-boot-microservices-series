@@ -1,4 +1,4 @@
-FROM frolvlad/alpine-oraclejdk8:slim
+FROM frolvlad/alpine-java
 ADD ["target/inventory-service-0.0.1-SNAPSHOT-exec.jar", "app.jar"]
 EXPOSE 8282 8787
 ENV JAVA_OPTS="-Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=8787,suspend=n"
