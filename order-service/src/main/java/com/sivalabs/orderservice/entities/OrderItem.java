@@ -1,6 +1,8 @@
 package com.sivalabs.orderservice.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -15,6 +17,7 @@ import java.math.BigDecimal;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class OrderItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,6 +26,7 @@ public class OrderItem {
     private int quantity;
     private BigDecimal productPrice;
 
+    @JsonIgnore
     public BigDecimal getPrice() {
         return productPrice.multiply(new BigDecimal(quantity));
     }

@@ -1,0 +1,19 @@
+{
+  "id": 1,
+  "customerEmail": "dummyEmail@json.com",
+  "customerAddress": "dummyAddress",
+  "items": [
+    {
+      "id": 11,
+      "productId": 1,
+      "quantity": 20,
+      "productPrice": 25.95
+    },
+    {
+      "id": 12,
+      "productId": 2,
+      "quantity": 15,
+      "productPrice": 15.95
+    }
+  ]
+}
