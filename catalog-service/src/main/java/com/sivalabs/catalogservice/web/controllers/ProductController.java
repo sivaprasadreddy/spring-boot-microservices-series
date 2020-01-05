@@ -11,8 +11,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping("/api/products")
@@ -26,7 +27,7 @@ public class ProductController {
     public List<Product> allProducts(HttpServletRequest request) {
         log.info("Finding all products");
         String authHeader = request.getHeader("AUTH_HEADER");
-        log.info("AUTH_HEADER: "+authHeader);
+        log.info("AUTH_HEADER: {}", authHeader);
         return productService.findAllProducts();
     }
 
