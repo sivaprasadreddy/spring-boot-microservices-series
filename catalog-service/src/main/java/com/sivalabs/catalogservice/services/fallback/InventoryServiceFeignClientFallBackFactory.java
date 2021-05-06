@@ -4,12 +4,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.springframework.cloud.openfeign.FallbackFactory;
 import org.springframework.stereotype.Component;
 
 import com.sivalabs.catalogservice.services.InventoryServiceFeignClient;
 import com.sivalabs.catalogservice.web.models.ProductInventoryResponse;
 
-import feign.hystrix.FallbackFactory;
 import lombok.extern.slf4j.Slf4j;
 
 @Component

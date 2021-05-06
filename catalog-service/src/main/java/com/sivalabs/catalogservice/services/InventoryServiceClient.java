@@ -1,15 +1,15 @@
 package com.sivalabs.catalogservice.services;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
-import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 import com.sivalabs.catalogservice.web.models.ProductInventoryResponse;
 
 import lombok.RequiredArgsConstructor;
@@ -32,11 +32,7 @@ public class InventoryServiceClient {
     }
 
 
-    @HystrixCommand(fallbackMethod = "getDefaultProductInventoryByCode",
-        commandProperties = {
-            @HystrixProperty(name="execution.isolation.strategy", value="SEMAPHORE")
-        }
-    )
+    @CircuitBreaker(name = "default", fallbackMethod = "getDefaultProductInventoryByCode")
     public Optional<ProductInventoryResponse> getProductInventoryByCode(String productCode)
     {
         ResponseEntity<ProductInventoryResponse> itemResponseEntity =
@@ -54,7 +50,7 @@ public class InventoryServiceClient {
         
 
         if (itemResponseEntity.getStatusCode() == HttpStatus.OK) {
-            Integer quantity = itemResponseEntity.getBody().getAvailableQuantity();
+            Integer quantity = Objects.requireNonNull(itemResponseEntity.getBody()).getAvailableQuantity();
             log.info("Available quantity: " + quantity);
             return Optional.ofNullable(itemResponseEntity.getBody());
         } else {
@@ -68,7 +64,7 @@ public class InventoryServiceClient {
         ProductInventoryResponse response = new ProductInventoryResponse();
         response.setProductCode(productCode);
         response.setAvailableQuantity(50);
-        return Optional.ofNullable(response);
+        return Optional.of(response);
     }
 
 }

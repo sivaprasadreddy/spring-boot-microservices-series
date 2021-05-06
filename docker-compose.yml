@@ -8,6 +8,16 @@ services:
     environment:
      MYSQL_ROOT_PASSWORD: admin
      MYSQL_DATABASE: catalog
+  
+  postgresqldb:
+    image: postgres:latest
+    container_name: postgres
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=postgres
+    ports:
+      - "5432:5432"
 
   rabbitmq:
     image: 'rabbitmq:3.8.3-management'
@@ -86,6 +96,9 @@ services:
     ports:
       - "8788:8788"
       - "38787:8787"
+    depends_on:
+      - config-server
+      - service-registry
 
   oauth2-server:
     container_name: oauth2-server
