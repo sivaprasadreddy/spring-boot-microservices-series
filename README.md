@@ -1,5 +1,5 @@
 # spring-boot-microservices-series
-Code for SpringBoot MicroServices Blog Series
+Code for [SpringBoot MicroServices Blog Series](https://sivalabs.in/2018/03/microservices-using-springboot-spring-cloud-part-1-overview/)
 
 ## Pre-Requisites
  - Java 8
@@ -25,15 +25,21 @@ If above step is not working then manually add values by visiting http://127.0.0
 
 ### Start infrastructure modules in docker:
 
-`spring-boot-microservices-series> docker-compose up -d mysqldb rabbitmq setup-vault config-server service-registry hystrix-dashboard`
+**The simplest way to run all the services in Docker:**
+
+`spring-boot-microservices-series> ./run.sh start_all`
+
+**To start only infrastructure services (mysqldb, rabbitmq, config-server, service-registry, hystrix-dashboard) in docker:**
+
+`spring-boot-microservices-series> ./run.sh start_infra`
 
 **Start each microservice either in local or in docker:**
 
 **Local:** `spring-boot-microservices-series/catalog-service> ./mvnw spring-boot:run`
 
-**Docker:** `spring-boot-microservices-series> docker-compose up -d <service> --build --force-recreate`
+**Docker:** `spring-boot-microservices-series> ./run.sh start <service>`
 
-Ex: `spring-boot-microservices-series> docker-compose up -d catalog-service --build --force-recreate`
+Ex: `spring-boot-microservices-series> ./run.sh start catalog-service`
 
 
 * MySQL container:

@@ -10,8 +10,8 @@ services:
      MYSQL_DATABASE: catalog
 
   rabbitmq:
+    image: 'rabbitmq:3.8.3-management'
     container_name: rabbitmq
-    image: 'rabbitmq:management'
     environment:
       - RABBITMQ_DEFAULT_USER=guest
       - RABBITMQ_DEFAULT_PASS=guest
@@ -20,7 +20,7 @@ services:
       - "15672:15672"
 
   vault:
-    image: vault
+    image: vault:1.4.0
     container_name: vault
     cap_add:
       - IPC_LOCK
@@ -30,7 +30,7 @@ services:
       - 8200:8200
 
   setup-vault:
-    image: vault
+    image: vault:1.4.0
     container_name: setup-vault
     entrypoint: /bin/sh
     volumes:
@@ -47,7 +47,7 @@ services:
       - vault
 
   zipkin-server:
-    image: openzipkin/zipkin
+    image: openzipkin/zipkin:2.21
     container_name: zipkin
     # Environment settings are defined here https://github.com/openzipkin/zipkin/tree/1.19.0/zipkin-server#environment-variables
     environment:
@@ -109,6 +109,7 @@ services:
       - "19797:8787"
     depends_on:
       - config-server
+      - setup-vault
       - mysqldb
     entrypoint: /bin/sh
     command: >
@@ -124,6 +125,7 @@ services:
       - "29797:8787"
     depends_on:
       - config-server
+      - setup-vault
       - mysqldb
     entrypoint: /bin/sh
     command: >
@@ -139,6 +141,7 @@ services:
       - "39797:8787"
     depends_on:
       - config-server
+      - setup-vault
     entrypoint: /bin/sh
     command: >
       -c "
@@ -153,6 +156,7 @@ services:
       - "49797:8787"
     depends_on:
       - config-server
+      - setup-vault
     entrypoint: /bin/sh
     command: >
       -c "
