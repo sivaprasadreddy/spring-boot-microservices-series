@@ -23,7 +23,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>11</java.version>
-        <spring-cloud.version>Hoxton.RELEASE</spring-cloud.version>
+        <spring-cloud.version>Hoxton.SR11</spring-cloud.version>
     </properties>
 
     <dependencies>
