@@ -27,7 +27,6 @@ import static org.springframework.restdocs.operation.preprocess.Preprocessors.pr
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT, properties = {
     "spring.cloud.discovery.enabled = false",
     "spring.cloud.circuit.breaker.enabled= false",
-    "hystrix.command.default.circuitBreaker.enabled= false",
     "spring.cloud.config.enabled= false" })
 @ExtendWith(RestDocumentationExtension.class)
 public abstract class OrderServiceApplicationTests {
