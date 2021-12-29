@@ -24,3 +24,5 @@ dist/
 nbdist/
 .nb-gradle/
 config/vault.exe
+
+.vscode

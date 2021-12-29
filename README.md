@@ -2,7 +2,7 @@
 Code for [SpringBoot MicroServices Blog Series](https://sivalabs.in/2018/03/microservices-using-springboot-spring-cloud-part-1-overview/)
 
 ## Pre-Requisites
- - Java 8
+ - Java 11
  - Docker(https://store.docker.com/editions/community/docker-ce-desktop-windows)
  - Vault(https://www.vaultproject.io/)
  - RabbitMQ (http://www.rabbitmq.com/install-windows.html)
