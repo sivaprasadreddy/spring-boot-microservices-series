@@ -1,44 +1,36 @@
 package com.sivalabs.shoppingcartui.filters;
 
-import com.netflix.zuul.ZuulFilter;
-import com.netflix.zuul.context.RequestContext;
-import com.netflix.zuul.exception.ZuulException;
+import org.springframework.cloud.gateway.filter.GatewayFilterChain;
+import org.springframework.cloud.gateway.filter.GlobalFilter;
+import org.springframework.core.Ordered;
+import org.springframework.web.server.ServerWebExchange;
 
-import javax.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
+import reactor.core.publisher.Mono;
 
 import java.util.UUID;
 
-import static org.springframework.cloud.netflix.zuul.filters.support.FilterConstants.PRE_TYPE;
-
-public class AuthHeaderFilter extends ZuulFilter {
-    @Override
-    public String filterType() {
-        return PRE_TYPE;
-    }
+@Slf4j
+public class AuthHeaderFilter implements GlobalFilter, Ordered {
 
     @Override
-    public int filterOrder() {
-        return 0;
-    }
-
-    @Override
-    public boolean shouldFilter() {
-        //RequestContext ctx = RequestContext.getCurrentContext();
-
-        return true;
-    }
-
-    @Override
-    public Object run() throws ZuulException {
-        RequestContext ctx = RequestContext.getCurrentContext();
-        HttpServletRequest request = ctx.getRequest();
-
-        if (request.getAttribute("AUTH_HEADER") == null) {
+    public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
+        log.info("custom global filter");
+        if (exchange.getAttribute("AUTH_HEADER") == null) {
             //generate or get AUTH_TOKEN, ex from Spring Session repository
             String sessionId = UUID.randomUUID().toString();
-            //request.setAttribute("AUTH_HEADER", sessionId);
-            ctx.addZuulRequestHeader("AUTH_HEADER", sessionId);
+            return chain.filter(
+                exchange.mutate().request(
+                        exchange.getRequest().mutate()
+                                .header("AUTH_HEADER", sessionId)
+                                .build())
+                        .build());
         }
-        return null;
+        return chain.filter(exchange);
+    }
+
+    @Override
+    public int getOrder() {
+        return -1;
     }
 }
