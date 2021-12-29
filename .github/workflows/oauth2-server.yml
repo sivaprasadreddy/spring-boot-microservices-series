@@ -1,0 +1,40 @@
+name: oauth2-server CI
+on:
+  push:
+    paths:
+      - "oauth2-server/**"
+    branches:
+      - master
+  pull_request:
+    paths:
+      - "oauth2-server/**"
+    types:
+      - opened
+      - synchronize
+      - reopened
+
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        java: [ '11' ]
+    name: Build on Java ${{ matrix.Java }}
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Set up JDK ${{ matrix.java }}
+        uses: actions/setup-java@v2.5.0
+        with:
+          java-version: ${{ matrix.java }}
+          distribution: 'adopt'
+          cache: 'maven'
+      - name: Build with Maven and analyze
+        run: |
+          cd oauth2-server
+          mvn -B clean package --file pom.xml 
+      - name: Codecov
+        uses: codecov/codecov-action@v2.1.0
+
