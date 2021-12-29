@@ -21,7 +21,6 @@
 		<module>inventory-service</module>
 		<module>order-service</module>
 		<module>shoppingcart-ui</module>
-		<module>zipkin-server</module>
 	</modules>
 
 
