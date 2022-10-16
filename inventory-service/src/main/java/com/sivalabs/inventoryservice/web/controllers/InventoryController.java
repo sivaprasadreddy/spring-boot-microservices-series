@@ -1,6 +1,5 @@
 package com.sivalabs.inventoryservice.web.controllers;
 
-import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.sivalabs.inventoryservice.entities.InventoryItem;
 import com.sivalabs.inventoryservice.repositories.InventoryItemRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -25,7 +24,7 @@ public class InventoryController {
     }
 
     @GetMapping("/api/inventory/{productCode}")
-    @HystrixCommand
+    //@HystrixCommand
     public ResponseEntity<InventoryItem> findInventoryByProductCode(@PathVariable("productCode") String productCode) {
         log.info("Finding inventory for product code :"+productCode);
         Optional<InventoryItem> inventoryItem = inventoryItemRepository.findByProductCode(productCode);
@@ -37,7 +36,7 @@ public class InventoryController {
     }
 
     @GetMapping("/api/inventory")
-    @HystrixCommand
+    //@HystrixCommand
     public List<InventoryItem> getInventory() {
         log.info("Finding inventory for all products ");
         return inventoryItemRepository.findAll();

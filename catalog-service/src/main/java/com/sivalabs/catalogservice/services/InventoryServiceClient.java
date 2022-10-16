@@ -1,7 +1,5 @@
 package com.sivalabs.catalogservice.services;
 
-import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
-import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 import com.sivalabs.catalogservice.utils.MyThreadLocalsHolder;
 import com.sivalabs.catalogservice.web.models.ProductInventoryResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -30,11 +28,11 @@ public class InventoryServiceClient {
         this.inventoryServiceFeignClient = inventoryServiceFeignClient;
     }
 
-    @HystrixCommand(fallbackMethod = "getDefaultProductInventoryLevels",
+    /*@HystrixCommand(fallbackMethod = "getDefaultProductInventoryLevels",
             commandProperties = {
                  @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "10000")
             }
-    )
+    )*/
     public List<ProductInventoryResponse> getProductInventoryLevels() {
         return this.inventoryServiceFeignClient.getInventoryLevels();
     }
@@ -45,7 +43,7 @@ public class InventoryServiceClient {
         return new ArrayList<>();
     }
 
-    @HystrixCommand(fallbackMethod = "getDefaultProductInventoryByCode")
+   // @HystrixCommand(fallbackMethod = "getDefaultProductInventoryByCode")
     public Optional<ProductInventoryResponse> getProductInventoryByCode(String productCode)
     {
         log.info("CorrelationID: "+ MyThreadLocalsHolder.getCorrelationId());

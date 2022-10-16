@@ -1,7 +1,6 @@
+/*
 package com.sivalabs.catalogservice.utils;
 
-import com.netflix.hystrix.strategy.HystrixPlugins;
-import com.netflix.hystrix.strategy.concurrency.HystrixConcurrencyStrategy;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -42,3 +41,4 @@ public class ContextCopyHystrixConcurrencyStrategy extends HystrixConcurrencyStr
         }
     }
 }
+*/

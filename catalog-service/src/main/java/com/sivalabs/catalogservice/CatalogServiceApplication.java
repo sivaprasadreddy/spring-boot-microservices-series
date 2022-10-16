@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.web.client.RestTemplate;
 
 @EnableFeignClients
-@EnableCircuitBreaker
+//@EnableCircuitBreaker
 @SpringBootApplication
 public class CatalogServiceApplication {
 
