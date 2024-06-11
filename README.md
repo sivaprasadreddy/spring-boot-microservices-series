@@ -1,6 +1,10 @@
 # spring-boot-microservices-series
 Code for [SpringBoot MicroServices Blog Series](https://sivalabs.in/2018/03/microservices-using-springboot-spring-cloud-part-1-overview/)
 
+> [!IMPORTANT]  
+> This is based on older versions of Spring Boot, Spring Cloud, and Spring Cloud Netflix.
+> Please refer to the [Spring Boot MicroServices Course](https://github.com/sivaprasadreddy/spring-boot-microservices-course) for the latest version.
+
 ## How to run?
 
 ### Build all modules:
